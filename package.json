@@ -1,0 +1,23 @@
+{
+	"name": "plotly.requests",
+	"version": "0.0.1",
+	"description": "Plotly's extension to add requests in chart's model",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/adeliz/plotly.requests"
+	},
+	"keywords": [
+		"plotly",
+		"requests",
+		"datasource"
+	],
+	"author": "adelise",
+	"license": "MIT",
+	"devDependencies": {
+		"uglify-js": "~2.4.16"
+	},
+	"scripts": {
+		"build": "uglifyjs index.js -o plotly.requests.min.js"
+	}
+}
