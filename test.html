@@ -1,12 +1,13 @@
+
+<!DOCTYPE html>
 <html>
 	<head>
 		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-		<script src="plotly.requests.min.js"></script>
+		<script src="index.js"></script>
 	</head>
 	<body>
-		<div id="tester" style="width:100%;height:400px;"></div>
+		<div id="chart" style="width:100%;height:400px;"></div>
 		<script>
-		TESTER = document.getElementById('tester');
 
 		var trace = {
 			"source":{
@@ -15,6 +16,7 @@
                     "name":"CSV",                
                     "script":"used only if name is null",
                     "parameters" : {
+                    	"separator":",",
                         "columnX":0,
                         "columnY":1
                     }
@@ -22,7 +24,7 @@
             },
             //"x": [0,1,2], 
             //"y": [1,2,1],
-            "name": "Humidity",
+            "name": "Google",
             "mode": "lines+markers",
             "line":{
                 "color":"rgba(61,114,201,0.5)",
@@ -34,40 +36,53 @@
             }
 		};
 		
-		Plotly.newPlot("tester",[trace],{},[{
+		Plotly.newPlot("chart",[trace],{},[{
 			"id":"source1",
-            "url":"https://gist.githubusercontent.com/adeliz/a3603ba0dc1b1f9869f51f9f46e120dd/raw/1d72ccb770a6bfdbb11ad1973d0c9275b6d4c3b5/temperature.csv?",
+			"url":"https://cors4js.appspot.com?url=http://ichart.finance.yahoo.com/table.csv?",
             "method":"GET",
             "parameters":{
-                "name":"sensor1",
-                "start":"20151103000000",
-                "aggregator":"min",
-                "sampling":"1d"
+                "s":"GOOG",
+                "a":"3",
+                "b":"12",
+                "c":"2015",
+                "d":"1",
+                "e":"28",
+                "f":"2016",
+                "g":"w"
             }
 			},
 			{
 			"id":"source2",
-            "url":"https://gist.githubusercontent.com/adeliz/a3603ba0dc1b1f9869f51f9f46e120dd/raw/33c8e9bd297de7e8a9d64a3b43ddf0bdbb44a6ed/pressure.json?",
+			"url":"https://cors4js.appspot.com?url=http://ichart.finance.yahoo.com/table.csv?",
             "method":"GET",
             "parameters":{
-                "name":"sensor2",
-                "start":"20151103000000",
-                "aggregator":"min",
-                "sampling":"1d"
+                "s":"YHOO",
+                "a":"3",
+                "b":"12",
+                "c":"2015",
+                "d":"1",
+                "e":"28",
+                "f":"2016",
+                "g":"w"
             }
 		}]);
 		
-		Plotly.addTraces("tester",{
+		Plotly.addTraces("chart",{
 			"source":{
                 "id":"source2",
                 "converter": {
-                    "name":"KDB",                
-                    "script":"used only if name is null"
+                    "name":"CSV",                
+                    "script":"used only if name is null",
+                    "parameters" : {
+                    	"separator":",",
+                        "columnX":0,
+                        "columnY":1
+                    }
                 }
             },
             //"x": [0,1,2], 
             //"y": [1,2,1],
-            "name": "Pressure",
+            "name": "Yahoo",
             "mode": "lines+markers",
             "line":{
                 "color":"rgba(255,114,201,0.5)",
@@ -92,16 +107,17 @@
 			"marker.opacity": 1,
 			"source.id": 'source2'
 		};
-		Plotly.restyle("tester",update,0);
+		Plotly.restyle("chart",update,0);
 		
-		var ds = TESTER.datasources;
-		ds[0].parameters.sampling="4d";
+		var chart = document.getElementById("chart");
+		var ds = chart.datasources;
+		ds[0].parameters.g="m";
 		
-		Plotly.updateDataSources("tester",ds);
-		Plotly.restyle("tester",update2,1);
+		Plotly.updateDataSources("chart",ds);
+		Plotly.restyle("chart",update2,1);
 		
 		
-		refreshData(TESTER,TESTER.data,TESTER.datasources);
+		//refreshData(chart,chart.data,chart.datasources);
 		
 		
 	</script>
