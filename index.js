@@ -39,8 +39,15 @@ Plotly.restyle = function(gd, update, indices){
 	Frestyle(gd, update, indices);
 	//get html element because gd can be a string or a DOM element
 	var gd = getGraphDiv(gd);
-	//load data to traces from data sources
-	loadData(gd,gd.data,gd.datasources);
+	//check if source is updated
+	for(var key in update){
+		if(key.indexOf("source")>-1){
+			//load data to traces from data sources
+			loadData(gd,gd.data,gd.datasources);
+			break;
+		}
+	}
+	
 }
 
 //Update datasources
