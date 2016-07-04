@@ -98,10 +98,15 @@ Plotly.converters.CSV = function(response,parameters){
 	for(var key in parameters){
 		if(key!="separator"){
 			data[key]=[[]];
+			var format = parameters[key+"format"];
 			for (var i = 1; i < lines.length; i++) {
-				
 				var val = lines[i].split(separator);
-				data[key][0].push(val[parameters[key]]);
+				if(format=="date"){
+					data[key][0].push(new Date(val[parameters[key]]));
+				}else{
+					data[key][0].push(val[parameters[key]]);
+				}
+				
 			}
 		}
 	}
