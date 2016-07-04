@@ -1,15 +1,15 @@
 //Save Plotly functions before to override them
-var FnewPlot = Plotly.newPlot;
-var Fplot = Plotly.plot;
-var FaddTraces = Plotly.addTraces;
-var Frestyle = Plotly.restyle;
+var _newPlot = Plotly.newPlot;
+var _plot = Plotly.plot;
+var _addTraces = Plotly.addTraces;
+var _restyle = Plotly.restyle;
 
 Plotly.converters = {};
 
 //Override plot function
 Plotly.plot = function(gd, data, layout, datasources, config){
 	//Call parent's function
-	FnewPlot(gd, data, layout, config);
+	_newPlot(gd, data, layout, config);
 	//get html element because gd can be a string or a DOM element
 	var gd = getGraphDiv(gd);
 	//set datasources to the DOM element
@@ -26,7 +26,7 @@ Plotly.newPlot = function(gd, data, layout, datasources, config){
 //Override addTraces function
 Plotly.addTraces = function(gd, traces, newIndices){
 	//Call parent's function
-	FaddTraces(gd, traces, newIndices);
+	_addTraces(gd, traces, newIndices);
 	//get html element because gd can be a string or a DOM element
 	var gd = getGraphDiv(gd);
 	//load data to traces from data sources
@@ -36,7 +36,7 @@ Plotly.addTraces = function(gd, traces, newIndices){
 //Override restyle function
 Plotly.restyle = function(gd, update, indices){
 	//Call parent's function
-	Frestyle(gd, update, indices);
+	_restyle(gd, update, indices);
 	//get html element because gd can be a string or a DOM element
 	var gd = getGraphDiv(gd);
 	//check if source is updated
@@ -48,6 +48,16 @@ Plotly.restyle = function(gd, update, indices){
 		}
 	}
 	
+}
+
+//Plot chart from JSON specification defined at specified url
+Plotly.load = function(gd,url,callback){
+	Plotly.d3.json(url,function(error, result) {
+		Plotly.plot(gd, result.data, result.layout, result.datasources, result.config);
+		if(callback){
+			callback(result);
+		}
+	})
 }
 
 //Update datasources
@@ -115,12 +125,12 @@ function loadData(gd,traces,datasources,tIndices,dsIndices){
 								//Use a specified converter or a script
 								if(traces[k].source.converter.name!=null){
 									var xy = Plotly.converters[traces[k].source.converter.name](result.responseText,traces[k].source.converter.parameters);
-									Frestyle(gd,{x:[xy[0]],y:[xy[1]]},k);
+									_restyle(gd,{x:[xy[0]],y:[xy[1]]},k);
 								}else{
 									//Use script attribute to create a new function and execute it
 									var tmpFunc = new Function('response','param',traces[k].source.converter.script);
 									var xy = tmpFunc(result.responseText,traces[k].source.converter.parameters);
-									Frestyle(gd,{x:[xy[0]],y:[xy[1]]},k);
+									_restyle(gd,{x:[xy[0]],y:[xy[1]]},k);
 								};
 							}
 						}
