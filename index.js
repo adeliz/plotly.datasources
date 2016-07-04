@@ -73,17 +73,19 @@ Plotly.updateDataSources = function(gd, update){
 Plotly.converters.KDB = function(response,parameters){
 
 	var resp=JSON.parse(response);
-	var xy=[[],[]];
+	var data={
+		x:[[]],
+		y:[[]]
+	};
 	var values  =resp.queries[0].results[0].values;
 	for (var i = 1; i < values.length; i++) {
-		xy[0].push(new Date(values[i][0]));
-		xy[1].push(parseFloat(values[i][1]));
+		data.x[0].push(new Date(values[i][0]));
+		data.y[0].push(parseFloat(values[i][1]));
 	}
-	return xy;
+	return data;
 };
 
 Plotly.converters.CSV = function(response,parameters){
-	var xy=[[],[]];
 	var lines = response.split("\n");
 	var separator=",";
 	if(parameters!=null){
@@ -91,14 +93,19 @@ Plotly.converters.CSV = function(response,parameters){
 			var separator=parameters.separator;
 		}
 	}
-	for (var i = 1; i < lines.length; i++) {
-		
-		var val = lines[i].split(separator);
-		xy[0].push(new Date(val[parameters.columnX]));
-		xy[1].push(val[parameters.columnY]);
+	
+	var data={};
+	for(var key in parameters){
+		if(key!="separator"){
+			data[key]=[[]];
+			for (var i = 1; i < lines.length; i++) {
+				
+				var val = lines[i].split(separator);
+				data[key][0].push(val[parameters[key]]);
+			}
+		}
 	}
-
-	return xy;
+	return data;
 };
 
 
@@ -124,13 +131,13 @@ function loadData(gd,traces,datasources,tIndices,dsIndices){
 							if(traces[k].source.id==datasources[index].id){
 								//Use a specified converter or a script
 								if(traces[k].source.converter.name!=null){
-									var xy = Plotly.converters[traces[k].source.converter.name](result.responseText,traces[k].source.converter.parameters);
-									_restyle(gd,{x:[xy[0]],y:[xy[1]]},k);
+									var data = Plotly.converters[traces[k].source.converter.name](result.responseText,traces[k].source.converter.parameters);
+									_restyle(gd,data,k);
 								}else{
 									//Use script attribute to create a new function and execute it
 									var tmpFunc = new Function('response','param',traces[k].source.converter.script);
-									var xy = tmpFunc(result.responseText,traces[k].source.converter.parameters);
-									_restyle(gd,{x:[xy[0]],y:[xy[1]]},k);
+									var data = tmpFunc(result.responseText,traces[k].source.converter.parameters);
+									_restyle(gd,data,k);
 								};
 							}
 						}
