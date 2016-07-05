@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<script src="../index.js"></script>
+	</head>
+	<body>
+		<div id="chart" style="width:100%;height:400px;"></div>
+		<script>
+
+		var trace = {
+			"source":{
+	                "id":"source1",
+	                "converter": {
+	                    "name":"CSV",                
+	                    "script":"used only if name is null",
+	                    "parameters" : {
+	                    	"separator":";",
+	                        "x":0,
+	                        "xformat":"date",
+	                        "y":1
+	                    }
+	                }
+	            },
+	            //"x": [0,1,2], 
+	            //"y": [1,2,1],
+	            "name": "Temperature",
+	            "mode": "lines+markers",
+	            "line":{
+	                "color":"rgba(61,114,201,0.5)",
+	                "width":1
+	            },
+	            "marker" : {
+	                "size":8,
+	                "opacity":0.8
+	            }
+		};
+		
+		Plotly.newPlot("chart",[trace],{},[
+			{
+				"id":"source1",
+				"url":"https://gist.githubusercontent.com/adeliz/a3603ba0dc1b1f9869f51f9f46e120dd/raw/temperature.csv?",
+				"method":"GET"
+			},
+			{
+				"id":"source2",
+				"url":"https://gist.githubusercontent.com/adeliz/a3603ba0dc1b1f9869f51f9f46e120dd/raw/pressure.json?",
+				"method":"GET"
+			}
+		]);
+		
+		Plotly.addTraces("chart",
+			{
+				"source":{
+		                "id":"source2",
+		                "converter": {
+					"name":"KDB",                
+					"script":"used only if name is null"
+		                }
+        		},
+			//"x": [0,1,2], 
+			//"y": [1,2,1],
+			"name": "Pressure",
+			"mode": "lines+markers",
+			"line":{
+				"color":"rgba(255,114,201,0.5)",
+				"width":1
+			},
+			"marker" : {
+				"size":8,
+				"opacity":0
+			}
+		},1);
+		
+		
+		/*var update = {
+			opacity: 0.4,
+			"marker.color": 'red',
+			"marker.opacity": 1,
+			"source.id": 'source1'
+		};
+		var update2 = {
+			opacity: 0.4,
+			"marker.color": 'green',
+			"marker.opacity": 1,
+			"source.id": 'source2'
+		};
+		Plotly.restyle("chart",update,0);
+		
+		var chart = document.getElementById("chart");
+		var ds = chart.datasources;
+		ds[0].parameters.sampling="4d";
+		
+		Plotly.updateDataSources("chart",ds);
+		Plotly.restyle("chart",update2,1);*/
+		
+		
+		//refreshData(chart,chart.data,chart.datasources);
+		
+		
+	</script>
+	</body>
+</html>

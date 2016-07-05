@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<script src="../index.js"></script>
+	</head>
+	<body>
+		<div id="chart" style="width:100%;height:400px;"></div>
+		<script>
+
+		var trace = {
+			"source":{
+				"id":"usgs",
+				"converter": {
+					"name":"CSV",                
+					"script":"used only if name is null",
+					"parameters" : {
+						"separator":",",
+						"x":0,
+						"xformat":"date",
+						"y":3,
+						"text":13,
+						"marker.size":4
+					}
+				}
+			},
+			//"x": [0,1,2], 
+			//"y": [1,2,1],
+			"name": "Magnitude",
+			"mode": "markers",
+			"line":{
+				"color":"rgba(61,114,201,0.5)",
+				"width":1
+			},
+			"marker" : {
+				"sizeref":0.15,
+				//"sizemode":"area",
+				"opacity":0.8
+			},
+			"type":"scatter"
+		};
+		
+		Plotly.newPlot("chart",[trace],{
+			"yaxis":{
+				type:"log",
+				//autorange: 'reversed',
+				title:"Depth (km)",
+				range: [3, -2],
+				showline:true
+				
+			},
+			xaxis:{
+				zeroline:true,
+				ticklen:12,
+				tickcolor:"rgba(0,0,0,0)",
+				side:"top",
+				showline:true
+			}
+		},[
+			{
+				"id":"usgs",
+				"url":"https://cors4js.appspot.com?url=http://earthquake.usgs.gov/fdsnws/event/1/query?",
+				"method":"GET",
+				"parameters":{
+					"starttime":"2016-07-03",
+					"endtime":"2016-07-05",
+					"format":"csv"
+				}
+			}
+		]);
+
+		</script>
+	</body>
+</html>
