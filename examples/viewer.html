@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<script src="../index.js"></script>
+		<style>
+			html,body {
+				width:100%;
+				height:100%;
+				padding:0;
+				margin:0
+			}
+			
+			#drop_zone {
+				border: 4px dashed #bbb;
+				border-radius: 5px;
+				margin:25px;
+				position:absolute;
+				top:0;
+				left:0;
+				right:0;
+				bottom:0;
+				text-align: center;
+				font: 20pt bold Verdana;
+				color: #bbb;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="chart" style="width:100%;height:100%;">
+			<div id="drop_zone"><br>Drop file here</div>
+		</div>
+		<script>
+			var url = window.location.search.split("=")[1];
+			var dropZone = document.getElementById("drop_zone");
+			if(url){
+				Plotly.load("chart","https://gist.githubusercontent.com/adeliz/b46591ef00d54ba24d1cd554ea86fa20/raw/finance.json",function(){
+					dropZone.parentNode.removeChild(dropZone);
+				});
+			}
+			
+			// Get file data on drop
+			dropZone.ondragover = function(){return false;};
+		    dropZone.addEventListener('drop', function(e) {
+		        e.stopPropagation();
+		        e.preventDefault();
+		        var files = e.dataTransfer.files; // Array of all files
+		      
+                var reader = new FileReader();
+                reader.onload = function(e2) { // finished reading file data.
+                	var jsonChart = JSON.parse(e2.target.result);
+                	Plotly.plot("chart",jsonChart.data,jsonChart.layout,jsonChart.datasources,jsonChart.config);
+                }
+                reader.readAsText(files[0]); // start reading the file data.
+			},false);
+		</script>
+	</body>
+</html>
