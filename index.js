@@ -10,12 +10,14 @@ Plotly.converters = {};
 Plotly.plot = function(gd, data, layout, datasources, config){
 	//Call parent's function
 	_newPlot(gd, data, layout, config);
-	//get html element because gd can be a string or a DOM element
-	var gd = getGraphDiv(gd);
-	//set datasources to the DOM element
-	gd.datasources=datasources;
-	//load data to traces from data sources
-	loadData(gd,data,datasources);
+	if(datasources){
+		//get html element because gd can be a string or a DOM element
+		var gd = getGraphDiv(gd);
+		//set datasources to the DOM element
+		gd.datasources=datasources;
+		//load data to traces from data sources
+		loadData(gd,data,datasources);
+	}
 }
 
 //Override newPlot function
@@ -47,7 +49,6 @@ Plotly.restyle = function(gd, update, indices){
 			break;
 		}
 	}
-	
 }
 
 //Plot chart from JSON specification defined at specified url
