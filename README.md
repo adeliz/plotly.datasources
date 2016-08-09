@@ -1,5 +1,5 @@
 # plotly.requests
-Plotly extension to add requests support into JSON model
+Plotly extension to add datasources support into JSON model
 
 The goal of this extension is to add the ability to set datasources in the json file that describes a chart.
 
@@ -16,7 +16,9 @@ A complete Json file chart is defined as below :
 }
 ```
 
-The data sources object is an array of data source where each element is defined this way :
+The data sources object is an array of data source where each element can be request parameters or data.
+It is defined this way for web requests :
+
 ```javascript
 {
   "id":"uniq", //uniq id of the datasource
@@ -26,6 +28,17 @@ The data sources object is an array of data source where each element is defined
   }
 }
 ```
+
+or, this way, if data are included in the json file :
+
+```javascript
+{
+  "id":"uniq", //uniq id of the datasource
+  "data":"x,y,color\n1,2,#F00\n2,5,#0F0\n3,4,#0FF"
+  }
+}
+```
+
 The data sources can be then used in the traces objects as a source specification:
 ```javascript
 {

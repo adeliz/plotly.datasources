@@ -125,6 +125,41 @@
 	
 	<div id="chart2" style="width:100%;height:400px;"></div>
 	<script>
+	Plotly.newPlot("chart2",[{
+		"source":{
+            "id":"source1",
+            "converter": {
+                "name":"CSV",
+                "parameters" : {
+                	"separator":",",
+                    "x":0,
+                    //"xformat":"date",
+                    "y":1,
+                    "marker.color":2
+                }
+            }
+        },
+        "name": "Google",
+        "mode": "lines+markers"
+	}],{},[{
+		"id":"source1",
+		"data":"x,y,color\n1,2,#F00\n2,5,#0F0\n3,4,#0FF"
+		},
+		{
+		"id":"source2",
+		"url":"https://cors4js.appspot.com?url=http://ichart.finance.yahoo.com/table.csv?",
+        "method":"GET",
+        "parameters":{
+            "s":"YHOO",
+            "a":"3",
+            "b":"12",
+            "c":"2015",
+            "d":"1",
+            "e":"28",
+            "f":"2016",
+            "g":"w"
+        }
+	}]);
 		//Plotly.load("chart2","https://gist.githubusercontent.com/adeliz/b46591ef00d54ba24d1cd554ea86fa20/raw/finance.json");
 	</script>
 	</body>

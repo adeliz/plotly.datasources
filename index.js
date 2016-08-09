@@ -121,37 +121,48 @@ function loadData(gd,traces,datasources,tIndices,dsIndices){
 	for(var i=0;i<datasources.length;i++){
 		(function(index){
 			
-			var u = datasources[index].url;
-			for(key in datasources[index].parameters){
-				u += key + "=" +datasources[index].parameters[key] + "&"
-			}
-			
-			var updateTraces = function(u){
-				Plotly.d3.xhr(u,function(error, result) {
-
-					//For each trace 
-					for(var k=0;k<traces.length;k++){
-						//Check if it uses a data source
-						if(traces[k].source!=null){
-							//If it's the current datasource
-							if(traces[k].source.id==datasources[index].id){
-								//Use a specified converter or a script
-								if(traces[k].source.converter.name!=null){
-									var data = Plotly.converters[traces[k].source.converter.name](result.responseText,traces[k].source.converter.parameters);
-									_restyle(gd,data,k);
-								}else{
-									//Use script attribute to create a new function and execute it
-									var tmpFunc = new Function('response','param',traces[k].source.converter.script);
-									var data = tmpFunc(result.responseText,traces[k].source.converter.parameters);
-									_restyle(gd,data,k);
-								};
-							}
+			var processData = function(error, result) {
+				//For each trace 
+				for(var k=0;k<traces.length;k++){
+					//Check if it uses a data source
+					if(traces[k].source!=null){
+						//If it's the current datasource
+						if(traces[k].source.id==datasources[index].id){
+							//Use a specified converter or a script
+							if(traces[k].source.converter.name!=null){
+								var data = Plotly.converters[traces[k].source.converter.name](result.responseText,traces[k].source.converter.parameters);
+								_restyle(gd,data,k);
+							}else{
+								//Use script attribute to create a new function and execute it
+								var tmpFunc = new Function('response','param',traces[k].source.converter.script);
+								var data = tmpFunc(result.responseText,traces[k].source.converter.parameters);
+								_restyle(gd,data,k);
+							};
 						}
 					}
-				});
+				}
 			};
 			
-			updateTraces(u);
+			
+			var u = datasources[index].url;
+			if(u){
+				//Executes request to get data
+				for(key in datasources[index].parameters){
+					u += key + "=" +datasources[index].parameters[key] + "&"
+				}
+				
+				var updateTraces = function(u){
+					Plotly.d3.xhr(u,processData);
+				};
+				
+				updateTraces(u);
+			}else{
+				//Data are already in json
+				var result = {};
+				result.responseText = datasources[index].data;
+				processData(null,result);
+			}
+			
 			
 		})(i)
 	}
