@@ -31,14 +31,24 @@
 			<div id="drop_info"><br>Drop file here</div>
 		</div>
 		<script>
-			var url = window.location.search.split("=")[1];
+			function getURLParameter(name) {
+			  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+			}
+			var url = getURLParameter('url');
+
 			var dropZone = document.getElementById("drop_zone");
 			var dropInfo = document.getElementById("drop_info");
 
+			var div = document.getElementById("chart");
+			
 			if(url){
 				Plotly.load("chart",url,function(){
 					dropInfo.style.visibility="hidden";
+					Plotly.Plots.resize(div);
 				});
+				window.onresize = function() {
+				    Plotly.Plots.resize(div);
+				};
 			}
 			
 			// Get file data on drop
@@ -52,6 +62,7 @@
                 reader.onload = function(e2) { // finished reading file data.
                 	var jsonChart = JSON.parse(e2.target.result);
                 	Plotly.plot("chart",jsonChart.data,jsonChart.layout,jsonChart.datasources,jsonChart.config);
+                	Plotly.Plots.resize(div);
                 	dropInfo.style.visibility="hidden";
                 }
                 reader.readAsText(files[0]); // start reading the file data.

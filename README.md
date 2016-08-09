@@ -58,6 +58,8 @@ The data sources can be then used in the traces objects as a source specificatio
 * [Weather](https://bl.ocks.org/adeliz/a3603ba0dc1b1f9869f51f9f46e120dd) : Programmatically, create plot with data source
 * [Earthquakes](https://bl.ocks.org/adeliz/0c948773b2641c722fe5e51acaa35585): Programmatically, update data sources
 
+There's also a [viewer](https://rawgit.com/adeliz/plotly.datasources/master/examples/viewer.html) where you can drag an drop a json file or [pass the url of a json file as a url's parameter](https://rawgit.com/adeliz/plotly.datasources/master/examples/viewer.html?url=https://gist.githubusercontent.com/adeliz/e0f01adf89b8ea75b15df8629c125c3c/raw/songs.json) 
+
 ## Converters
 Because, most of the time, data from web services are not in the right format for Plotly, you can use or define converters. A converter will transform the data received from the web service and will return a object where each attribute is an attribute of a Plotly trace.
 
@@ -66,7 +68,7 @@ For example, a converter for a scatter plot should return this kind of object :
 {
 	x:[],
 	y:[],
-	name:[],
+	text:[],
 	"errors_x.array":[],
 	"errors_y.array":[]
 }
