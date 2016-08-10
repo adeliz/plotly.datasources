@@ -145,10 +145,14 @@ function loadData(gd,traces,datasources,tIndices,dsIndices){
 				}
 			};
 			
-			
-			var u = datasources[index].url;
-			if(u){
+			if(datasources[index].data){
+				//Data are already in json
+				var result = {};
+				result.responseText = datasources[index].data;
+				processData(null,result);
+			}else{
 				//Executes request to get data
+				var u = datasources[index].url;
 				for(key in datasources[index].parameters){
 					u += key + "=" +datasources[index].parameters[key] + "&"
 				}
@@ -158,13 +162,7 @@ function loadData(gd,traces,datasources,tIndices,dsIndices){
 				};
 				
 				updateTraces(u);
-			}else{
-				//Data are already in json
-				var result = {};
-				result.responseText = datasources[index].data;
-				processData(null,result);
-			}
-			
+			}			
 			
 		})(i)
 	}
