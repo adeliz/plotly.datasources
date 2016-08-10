@@ -32,7 +32,9 @@ Plotly.addTraces = function(gd, traces, newIndices){
 	//get html element because gd can be a string or a DOM element
 	var gd = getGraphDiv(gd);
 	//load data to traces from data sources
-	loadData(gd,traces,gd.datasources);
+	if(gd.datasources){
+		loadData(gd,traces,gd.datasources);
+	}
 }
 
 //Override restyle function
