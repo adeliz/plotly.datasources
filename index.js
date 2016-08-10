@@ -4,7 +4,7 @@ var _plot = Plotly.plot;
 var _addTraces = Plotly.addTraces;
 var _restyle = Plotly.restyle;
 
-Plotly.converters = {};
+Plotly.formatters = {};
 
 //Override plot function
 Plotly.plot = function(gd, data, layout, datasources, config){
@@ -71,9 +71,9 @@ Plotly.updateDataSources = function(gd, update){
 	loadData(gd,gd.data,gd.datasources);
 }
 
-Plotly.converters.KDB = function(response,parameters){
+Plotly.formatters.KDB = function(data,parameters){
 
-	var resp=JSON.parse(response);
+	var resp=JSON.parse(data);
 	var data={
 		x:[[]],
 		y:[[]]
@@ -86,8 +86,8 @@ Plotly.converters.KDB = function(response,parameters){
 	return data;
 };
 
-Plotly.converters.CSV = function(response,parameters){
-	var lines = response.split("\n");
+Plotly.formatters.CSV = function(data,parameters){
+	var lines = data.split("\n");
 	var separator=",";
 	if(parameters!=null){
 		if(parameters.separator!=null){
@@ -128,14 +128,14 @@ function loadData(gd,traces,datasources,tIndices,dsIndices){
 					if(traces[k].source!=null){
 						//If it's the current datasource
 						if(traces[k].source.id==datasources[index].id){
-							//Use a specified converter or a script
-							if(traces[k].source.converter.name!=null){
-								var data = Plotly.converters[traces[k].source.converter.name](result.responseText,traces[k].source.converter.parameters);
+							//Use a specified formatter or a script
+							if(traces[k].source.formatter!=null){
+								var data = Plotly.formatters[traces[k].source.formatter](result.responseText,traces[k].source.parameters);
 								_restyle(gd,data,k);
 							}else{
 								//Use script attribute to create a new function and execute it
-								var tmpFunc = new Function('response','param',traces[k].source.converter.script);
-								var data = tmpFunc(result.responseText,traces[k].source.converter.parameters);
+								var tmpFunc = new Function('response','param',traces[k].source.script);
+								var data = tmpFunc(result.responseText,traces[k].source.parameters);
 								_restyle(gd,data,k);
 							};
 						}

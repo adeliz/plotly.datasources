@@ -11,19 +11,14 @@
 		var trace = {
 			"source":{
 	                "id":"source1",
-	                "converter": {
-	                    "name":"CSV",                
-	                    "script":"used only if name is null",
-	                    "parameters" : {
-	                    	"separator":";",
-	                        "x":0,
-	                        "xformat":"date",
-	                        "y":1
-	                    }
-	                }
+                    "formatter":"CSV",
+                    "parameters" : {
+                    	"separator":";",
+                        "x":0,
+                        "xformat":"date",
+                        "y":1
+                    }
 	            },
-	            //"x": [0,1,2], 
-	            //"y": [1,2,1],
 	            "name": "Temperature",
 	            "mode": "lines+markers",
 	            "line":{
@@ -52,14 +47,9 @@
 		Plotly.addTraces("chart",
 			{
 				"source":{
-		                "id":"source2",
-		                "converter": {
-					"name":"KDB",                
-					"script":"used only if name is null"
-		                }
+		            "id":"source2",
+					"formatter":"KDB"
         		},
-			//"x": [0,1,2], 
-			//"y": [1,2,1],
 			"name": "Pressure",
 			"mode": "lines+markers",
 			"line":{

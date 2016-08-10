@@ -12,19 +12,13 @@
 		var trace = {
 			"source":{
                 "id":"source1",
-                "converter": {
-                    "name":"CSV",                
-                    "script":"used only if name is null",
-                    "parameters" : {
-                    	"separator":",",
-                        "x":0,
-                        "xformat":"date",
-                        "y":1
-                    }
+                "formatter":"CSV",
+                "parameters" : {
+                	"separator":",",
+                    "x":0,
+                    "y":1
                 }
             },
-            //"x": [0,1,2], 
-            //"y": [1,2,1],
             "name": "Google",
             "mode": "lines+markers",
             "line":{
@@ -81,8 +75,6 @@
                     }
                 }
             },
-            //"x": [0,1,2], 
-            //"y": [1,2,1],
             "name": "Yahoo",
             "mode": "lines+markers",
             "line":{
@@ -128,15 +120,12 @@
 	Plotly.newPlot("chart2",[{
 		"source":{
             "id":"source1",
-            "converter": {
-                "name":"CSV",
-                "parameters" : {
-                	"separator":",",
-                    "x":0,
-                    //"xformat":"date",
-                    "y":1,
-                    "marker.color":2
-                }
+            "formatter":"CSV",
+            "parameters" : {
+            	"separator":",",
+                "x":0,
+                "y":1,
+                "marker.color":2
             }
         },
         "name": "Google",

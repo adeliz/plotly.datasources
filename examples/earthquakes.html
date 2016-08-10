@@ -11,17 +11,15 @@
 		var trace = {
 			"source":{
 				"id":"usgs",
-				"converter": {
-					"name":"CSV",                
-					"script":"used only if name is null",
-					"parameters" : {
-						"separator":",",
-						"x":0,
-						"xformat":"date",
-						"y":3,
-						"text":13,
-						"marker.size":4
-					}
+				"formatter":"CSV",                
+				"script":"used only if name is null",
+				"parameters" : {
+					"separator":",",
+					"x":0,
+					"xformat":"date",
+					"y":3,
+					"text":13,
+					"marker.size":4
 				}
 			},
 			//"x": [0,1,2], 

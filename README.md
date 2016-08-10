@@ -1,4 +1,4 @@
-# plotly.requests
+# plotly.datasources
 Plotly extension to add datasources support into JSON model
 
 The goal of this extension is to add the ability to set datasources in the json file that describes a chart.
@@ -43,12 +43,10 @@ The data sources can be then used in the traces objects as a source specificatio
 ```javascript
 {
   "id":"", //id of the data source
-  "converter":{
-     "name":"", //Name of the converter
-     "script":"", //Use only if name is null. Must return data object. See below
-     "parameters":{
-       //Parameters are specifics to each converter. See below. They are also passed as arguments to the function defined in the script attribute
-     }
+  "formatter":"", //Name of the formatter defined in Plotly.formatters (see below)
+  "script":"", //Use only if formatter is null. Must return data object (see below)
+  "parameters":{
+    //Parameters are specifics to each formatter (see below). They are also passed as arguments to the function defined in the script attribute
   }
 }
 ```
@@ -60,10 +58,10 @@ The data sources can be then used in the traces objects as a source specificatio
 
 There's also a [viewer](https://rawgit.com/adeliz/plotly.datasources/master/examples/viewer.html) where you can drag an drop a json file or [pass the url of a json file as a url's parameter](https://rawgit.com/adeliz/plotly.datasources/master/examples/viewer.html?url=https://gist.githubusercontent.com/adeliz/e0f01adf89b8ea75b15df8629c125c3c/raw/songs.json) 
 
-## Converters
-Because, most of the time, data from web services are not in the right format for Plotly, you can use or define converters. A converter will transform the data received from the web service and will return a object where each attribute is an attribute of a Plotly trace.
+## Formatters
+Because, most of the time, data from web services are not in the right format for Plotly, you can use or define formatters. A formatter will transform the data received from the web service and will return a object where each attribute is an attribute of a Plotly trace.
 
-For example, a converter for a scatter plot should return this kind of object :
+For example, a formatter for a scatter plot should return this kind of object :
 ```javascript
 {
 	x:[],
@@ -74,13 +72,13 @@ For example, a converter for a scatter plot should return this kind of object :
 }
 ```
 
-Converters can be defined in 2 ways :
+Formatters can be defined in 2 ways :
 * in the script parameter
 * as a Javascript function. 
 
 ```javascript
-//myconverter will be use as the converter's name in the source object of a trace 
-Plotly.converters.myconverter = function(response,parameters){ //First argument is the web request reponseText, Second argument is the parameters defined in the trace object
+//myformatter will be use as the formatter's name in the source object of a trace 
+Plotly.formatters.myformatter = function(response,parameters){ //First argument is the data, Second argument is the parameters defined in the source object of the trace
 	//Do your transformations...
 	return {
 		x:[],
@@ -88,7 +86,17 @@ Plotly.converters.myconverter = function(response,parameters){ //First argument 
 	};
 }
 ```
-There are already 2 predefined converters :
-* CSV: set separated values to x,y data with the following parameters : columnX, columnY, separator (todo : header)
+There are already 2 predefined formatters :
+* CSV: set separated values to Plotly attributes using name and corresponding column index. Separator can also be defined (todo : add header parameter to define how many lines are used for header). Example :
+```javascript
+"parameters" : {
+	"separator":";",
+	"x":0,
+	"y":1,
+	"text":2,
+	"errors_x.array":7,
+	"errors_y.array":8
+}
+``` 
 * KDB: set KairosDB data to x,y data
 
