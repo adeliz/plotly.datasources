@@ -153,13 +153,22 @@ function loadData(gd,traces,datasources,tIndices,dsIndices){
 			}else{
 				//Executes request to get data
 				var u = datasources[index].url;
-				for(key in datasources[index].parameters){
-					u += key + "=" +datasources[index].parameters[key] + "&"
+				
+				if(datasources[index].method=="POST"){
+					var updateTraces = function(u){
+						Plotly.d3.xhr(u)
+							.post(JSON.stringify(datasources[index].parameters),processData);
+					};
+				}else{
+					for(key in datasources[index].parameters){
+						u += key + "=" +datasources[index].parameters[key] + "&"
+					}
+					
+					var updateTraces = function(u){
+						Plotly.d3.xhr(u,processData);
+					};
 				}
 				
-				var updateTraces = function(u){
-					Plotly.d3.xhr(u,processData);
-				};
 				
 				updateTraces(u);
 			}			
