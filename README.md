@@ -23,8 +23,8 @@ It is defined this way for web requests :
 {
   "id":"uniq", //uniq id of the datasource
   "url":"http://",
-  "method":"GET" //current supported method is only GET
-  "parameters":{ //parameters can be specified in a key/value format
+  "method":"GET" //current supported method is GET or POST
+  "parameters":{ //parameters can be specified in a key/value format for GET request and in a JSON format for POST request
   }
 }
 ```
